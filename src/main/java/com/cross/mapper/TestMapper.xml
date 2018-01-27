@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cross.mapper.TestMapper">
+
+    <resultMap type="com.cross.pojo.ManageMoneyPassage" id="PassageList">
+        <id column="id" property="id" />
+        <result column="passageTitle" property="passageTitle" />
+        <result column="passageImg" property="passageImg" />
+        <result column="passageContent" property="passageContent" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.cross.pojo.Test" useGeneratedKeys="true" keyProperty="id">
+        insert into Test ( name ) values (#{name})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from Test where id= #{id}
+    </delete>
+
+    <select id="get" parameterType="java.lang.Integer" resultType="com.cross.pojo.Test">
+        select * from Test where id= #{id}
+    </select>
+
+    <update id="update" parameterType="com.cross.pojo.Test" >
+        update Test set name=#{name} where id=#{id}
+    </update>
+
+    <!--<select id="getAll" resultMap="TestList">-->
+        <!--select * from  Test-->
+    <!--</select>-->
+
+
+    <insert id="addManageMoneyPassage" parameterType="com.cross.pojo.ManageMoneyPassage" useGeneratedKeys="true" keyProperty="id">
+        replace into managemoneypassage ( passageTitle,passageImg,passageContent ) values (#{passageTitle},#{passageImg},#{passageContent});
+    </insert>
+
+
+    <delete id="checkCount"  >
+        delete from managemoneypassage where id not in (SELECT t.id from (select * from managemoneypassage ORDER BY id desc limit 20)as t );
+    </delete>
+
+    <select id="getPassage" resultMap="PassageList">
+        select * from  managemoneypassage
+    </select>
+
+
+
+
+
+
+</mapper>
