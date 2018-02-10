@@ -48,6 +48,9 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+
+
+
     <!-- 开启注解事务 -->
     <tx:annotation-driven/>
 

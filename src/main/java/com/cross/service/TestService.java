@@ -1,5 +1,6 @@
 package com.cross.service;
 
+import com.cross.Bean.ReturnJson;
 import com.cross.pojo.GuPiaoBean;
 import com.cross.pojo.GuPiaoContent;
 import com.cross.pojo.ManageMoneyPassage;
@@ -29,4 +30,11 @@ public interface TestService {
     public List<GuPiaoBean> getGuPiao();
 
     public GuPiaoContent getGuPiaoContent(String code);
+
+    public List<ManageMoneyPassage> getAd();
+
+    public String sign(String account, String password);
+
+    public String register(String username,String account, String password);
+
 }

@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cross.mapper.TestMapper;
-import com.cross.pojo.GuPiaoBean;
-import com.cross.pojo.GuPiaoContent;
-import com.cross.pojo.ManageMoneyPassage;
-import com.cross.pojo.Test;
+import com.cross.pojo.*;
 import com.cross.service.TestService;
 import com.cross.util.PublicUtils;
 import org.jsoup.Jsoup;
@@ -125,16 +122,17 @@ public class TestServiceImpl implements TestService {
     }
 
     public GuPiaoContent getGuPiaoContent(final String code) {
-        final GuPiaoContent cpc =new GuPiaoContent();
+        final GuPiaoContent cpc = new GuPiaoContent();
         String type = "sh";
-        if(code.substring(0,3).equals("000")||code.substring(0,3).equals("002")||code.substring(0,3).equals("300"))type ="sz";
-        else if(code.substring(0,3).equals("600")||code.substring(0,3).equals("601")) type = "sh";
+        if (code.substring(0, 3).equals("000") || code.substring(0, 3).equals("002") || code.substring(0, 3).equals("300"))
+            type = "sz";
+        else if (code.substring(0, 3).equals("600") || code.substring(0, 3).equals("601")) type = "sh";
         final String finalType = type;
         Thread t = new Thread(new Runnable() {
             public void run() {
                 Document doc = null;
                 try {
-                    doc = Jsoup.connect("https://gupiao.baidu.com/stock/"+ finalType +code+".html").referrer("https://gupiao.baidu.com/").userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").get();
+                    doc = Jsoup.connect("https://gupiao.baidu.com/stock/" + finalType + code + ".html").referrer("https://gupiao.baidu.com/stock/sz000001.html").userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").timeout(0).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -175,7 +173,7 @@ public class TestServiceImpl implements TestService {
                 cpc.setPricechange(es2.get(0).select("span:nth-child(2)").text());
                 cpc.setChangepercent(es2.get(0).select("span:nth-child(3)").text());
                 Elements es4 = doc.select("#app-wrap > div.right.stock-right-box > div:nth-child(3) > div.industry > p:nth-child(4)");
-                for (Element e : es4){
+                for (Element e : es4) {
                     cpc.setContent(e.text());
                 }
             }
@@ -188,6 +186,68 @@ public class TestServiceImpl implements TestService {
         }
 
         return cpc;
+    }
+
+
+    public List<ManageMoneyPassage> getAd() {
+        final List<ManageMoneyPassage> list = new ArrayList<ManageMoneyPassage>();
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                Document doc = null;
+
+                try {
+                    doc = Jsoup.connect("http://stock.laoqianzhuang.com/redianticai/").referrer("http://money.laoqianzhuang.com/licaiguihua/").userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Elements e1 = doc.select("#list_ul").select("img");
+                for (int i = 0; i < 3; i++) {
+                    ManageMoneyPassage manageMoneyPassage = new ManageMoneyPassage();
+                    manageMoneyPassage.setPassageImg(e1.get(i).attr("src"));
+                    manageMoneyPassage.setPassageTitle(e1.get(i).attr("title"));
+                    list.add(manageMoneyPassage);
+                }
+                Elements e2 = doc.select("#list_ul").select("span").select("a");
+                for (int i = 0; i < 3; i++) {
+                    ManageMoneyPassage mmp = list.get(i);
+                    StringBuilder sb = new StringBuilder();
+                    try {
+                        Document doc1 = Jsoup.connect(e2.get(i).attr("href")).referrer(e2.get(i).attr("href")).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").get();
+                        Elements es1 = doc1.select("#atc-content").select("p");
+                        for (Element e : es1
+                                ) {
+                            sb.append(e.text());
+                            sb.append("\n");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mmp.setPassageContent(sb.toString());
+                }
+
+            }
+        });
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public String sign(String account , String password){
+        String aaa = null ;
+        System.out.println(account +"11"+password);
+       User user =testMapper.sign(account);
+        System.out.println(user.getPassword());
+        return aaa;
+    }
+
+    public String register(String username,String account, String password){
+        User user =new User(username,account,password);
+        testMapper.register(user);
+        return "11231";
     }
 
 

@@ -42,7 +42,7 @@ public class Task extends TimerTask {
                     imgList = new ArrayList<String>();
                     passageList = new ArrayList<String>();
                     try {
-                        doc = Jsoup.connect("http://money.laoqianzhuang.com/licaiguihua/").referrer("http://money.laoqianzhuang.com/licaiguihua/").userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").get();
+                        doc = Jsoup.connect("http://money.laoqianzhuang.com/licaiguihua/").referrer("http://money.laoqianzhuang.com/licaiguihua/").userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36").timeout(0).get();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -65,7 +65,7 @@ public class Task extends TimerTask {
                         Elements es2 = doc.select("#atc-content").select("p");
                         StringBuilder sb = new StringBuilder();
                         for (int j = 0; j < es2.size(); j++) {
-                            sb.append(es2.text().toString());
+                            sb.append(es2.get(j).text().toString());
                             sb.append("\n");
                         }
                         passageList.add(sb.toString());
