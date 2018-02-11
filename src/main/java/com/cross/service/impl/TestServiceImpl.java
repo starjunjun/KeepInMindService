@@ -236,16 +236,14 @@ public class TestServiceImpl implements TestService {
         return list;
     }
 
-    public String sign(String account , String password){
-        String aaa = null ;
-        System.out.println(account +"11"+password);
-       User user =testMapper.sign(account);
-        System.out.println(user.getPassword());
-        return aaa;
+    public User sign(String account, String password) {
+        User user = null;
+        user = testMapper.sign(account);
+        return user;
     }
 
-    public String register(String username,String account, String password){
-        User user =new User(username,account,password);
+    public String register(String username, String account, String password) {
+        User user = new User(username, account, password);
         testMapper.register(user);
         return "11231";
     }

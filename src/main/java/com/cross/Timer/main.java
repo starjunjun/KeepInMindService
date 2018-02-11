@@ -2,6 +2,7 @@ package com.cross.Timer;
 
 import com.cross.pojo.GuPiaoContent;
 import com.cross.pojo.ManageMoneyPassage;
+import com.cross.util.PublicUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +22,8 @@ public class main {
     private static String url1;
 
     public static void main(String[] args) {
+
+
         new Thread(new Runnable() {
             public void run() {
                 Document doc = null;

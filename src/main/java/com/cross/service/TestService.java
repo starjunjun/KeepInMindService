@@ -1,10 +1,7 @@
 package com.cross.service;
 
 import com.cross.Bean.ReturnJson;
-import com.cross.pojo.GuPiaoBean;
-import com.cross.pojo.GuPiaoContent;
-import com.cross.pojo.ManageMoneyPassage;
-import com.cross.pojo.Test;
+import com.cross.pojo.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +30,7 @@ public interface TestService {
 
     public List<ManageMoneyPassage> getAd();
 
-    public String sign(String account, String password);
+    public User sign(String account, String password);
 
     public String register(String username,String account, String password);
 
